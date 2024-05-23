@@ -53,60 +53,7 @@ class DetailsFragment : Fragment() {
                     }
                 }
 
-                // Once you have the list of dates, initialize your calendar view
-                setupCalendarView(datesList)
-            }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Handle errors
-            }
-        })
-    }
-    private fun setupCalendarView(datesList: List<String>) {
-        val events = mutableMapOf<Calendar, List<LogsModel>>()
-
-        // Convert datesList to a map of Calendar to corresponding data
-        datesList.forEach { dateString ->
-            val dateParts = dateString.split("/")
-            val day = dateParts[1].toInt()
-            val month = dateParts[0].toInt() - 1 // Month is 0-based in Calendar
-            val year = dateParts[2].toInt()
-            val calendar = Calendar.getInstance().apply {
-                set(year, month, day)
-            }
-
-            // Retrieve data from Firebase for the current date
-            retrieveDataForDate(dateString) { logList ->
-                events[calendar] = logList
-                // Add markers for events on specific dates
-                binding.calendarView.addDecorator(EventDecorator(Color.RED, calendar))
-            }
-        }
-
-        // Handle date selection
-        binding.calendarView.setOnDateChangedListener { _, selectedDate, _ ->
-            // Handle date selection here
-            val calendar = Calendar.getInstance().apply {
-                time = selectedDate
-            }
-            val selectedLogs = events[calendar]
-            // Update UI with the selectedLogs
-            updateUI(selectedLogs)
-        }
-    }
-
-    private fun retrieveDataForDate(dateString: String, callback: (List<LogsModel>) -> Unit) {
-        val logList = mutableListOf<LogsModel>()
-
-        // Retrieve data from Firebase for the specified date
-        val query = database.child("Logs").orderByChild("date").equalTo(dateString)
-        query.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (logSnapshot in dataSnapshot.children) {
-                    val log = logSnapshot.getValue(LogsModel::class.java)
-                    log?.let { logList.add(it) }
-                }
-                callback(logList)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -115,13 +62,8 @@ class DetailsFragment : Fragment() {
         })
     }
 
-    private fun updateUI(logs: List<LogsModel>?) {
-        // Update UI with the selected logs
-        // For example, display the logs in a RecyclerView
-        logs?.let {
-            val adapter = (logs)
-            binding.recyclerView.adapter = adapter
-        }
-    }
+
+
+
 
 }
