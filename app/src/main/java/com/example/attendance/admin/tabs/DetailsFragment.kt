@@ -6,64 +6,52 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.attendance.R
-import com.example.attendance.admin.tabs.model.LogsModel
+import com.example.attendance.admin.tabs.adapter.LogsAdapter
+import com.example.attendance.admin.viewmodels.LogsViewModel
 import com.example.attendance.databinding.FragmentDetailsBinding
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 
 class DetailsFragment : Fragment() {
-   private lateinit var binding : FragmentDetailsBinding
-    private lateinit var database: DatabaseReference
-    private lateinit var auth: FirebaseAuth
+
+    private var _binding: FragmentDetailsBinding? = null
+    private val binding get() = _binding!!
+    private val logsViewModel: LogsViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentDetailsBinding.inflate(layoutInflater)
-        // Inflate the layout for this fragment
+    ): View {
+        _binding = FragmentDetailsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        auth = FirebaseAuth.getInstance()
-        database = FirebaseDatabase.getInstance().reference
-        val fingerPrint = arguments?.getString("fingerPrint")
+        binding.recycler.layoutManager = LinearLayoutManager(requireContext())
+
         val rfid = arguments?.getString("rfid")
-        retrieveData(fingerPrint,rfid)
-    }
+        val fingerPrint = arguments?.getString("fingerPrint")
 
-    private fun retrieveData(fingerPrint: String?, rfid: String?) {
-        val query = database.child("Logs")
+        if (rfid != null && fingerPrint != null) {
+            logsViewModel.fetchLogs(rfid, fingerPrint)
+        }
 
-        query.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val datesList = mutableListOf<String>()
-
-                for (logSnapshot in dataSnapshot.children) {
-                    val log = logSnapshot.getValue(LogsModel::class.java)
-                    if (log?.fingerPrint == fingerPrint || log?.rfid == rfid) {
-                        // Extract the date from the retrieved data
-                        log?.date?.let { datesList.add(it) }
-                    }
+        logsViewModel.logs.observe(viewLifecycleOwner) { logList ->
+            if (logList != null) {
+                val filteredLogs = logList.filter { log ->
+                    log.rfid == rfid && log.fingerPrint == fingerPrint
                 }
-
-
+                val logsAdapter = LogsAdapter(filteredLogs)
+                binding.recycler.adapter = logsAdapter
             }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Handle errors
-            }
-        })
+        }
     }
 
-
-
-
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

@@ -67,7 +67,7 @@ class HomeAdminFragment : Fragment() {
 
                     }
                     //set up adapter
-                    adapter = HomeAdapter(this@HomeAdminFragment.requireContext(), accArrayList)
+                    adapter = HomeAdapter(this@HomeAdminFragment.requireContext(), accArrayList,findNavController())
                     //set to recycler
                     binding.recy.setHasFixedSize(true)
                     binding.recy.layoutManager = LinearLayoutManager(context)

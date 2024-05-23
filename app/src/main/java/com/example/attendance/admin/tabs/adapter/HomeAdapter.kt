@@ -60,12 +60,14 @@ class HomeAdapter(
         }
         holder.itemView.setOnClickListener {
             val detailsFragment = DetailsFragment()
-            val bundle = Bundle()
-            bundle.putString("rfid", rfid)
-            bundle.putString("fingerPrint", fingerPrint)
+            val bundle = Bundle().apply {
+                putString("rfid", rfid)
+                putString("fingerPrint", fingerPrint)
+            }
             detailsFragment.arguments = bundle
             navController.navigate(R.id.detailsFragment, bundle)
         }
+
     }
 
 
