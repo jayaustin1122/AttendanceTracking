@@ -1,6 +1,5 @@
-package com.example.attendance
+package com.example.attendance.ui
 
-import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import androidx.fragment.app.Fragment
@@ -9,8 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
-import com.example.attendance.databinding.FragmentSignUpBinding
-import com.example.attendance.databinding.FragmentSplashBinding
+import com.example.attendance.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError

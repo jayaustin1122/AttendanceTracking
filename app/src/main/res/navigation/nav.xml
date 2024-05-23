@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.example.attendance.SplashFragment"
+        android:name="com.example.attendance.ui.SplashFragment"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash" >
         <action
@@ -22,12 +22,12 @@
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.example.attendance.SignUpFragment"
+        android:name="com.example.attendance.ui.SignUpFragment"
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up" />
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.attendance.LoginFragment"
+        android:name="com.example.attendance.ui.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -36,12 +36,12 @@
     </fragment>
     <fragment
         android:id="@+id/userFragment"
-        android:name="com.example.attendance.UserFragment"
+        android:name="com.example.attendance.ui.UserFragment"
         android:label="fragment_user"
         tools:layout="@layout/fragment_user" />
     <fragment
         android:id="@+id/adminFragmentFragment"
-        android:name="com.example.attendance.AdminFragmentFragment"
+        android:name="com.example.attendance.ui.AdminFragmentFragment"
         android:label="fragment_admin_fragment"
         tools:layout="@layout/fragment_admin_fragment" />
 </navigation>

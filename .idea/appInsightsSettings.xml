@@ -9,9 +9,9 @@
               <option name="connection">
                 <ConnectionSetting>
                   <option name="appId" value="com.example.attendance" />
-                  <option name="mobileSdkAppId" value="1:877142941875:android:3ed830dad79c7c6d3890c6" />
-                  <option name="projectId" value="battery-b7a18" />
-                  <option name="projectNumber" value="877142941875" />
+                  <option name="mobileSdkAppId" value="1:406859209945:android:9ea6ed37d85000010e32c8" />
+                  <option name="projectId" value="battery-7b2a7" />
+                  <option name="projectNumber" value="406859209945" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

@@ -1,4 +1,4 @@
-package com.example.attendance
+package com.example.attendance.ui
 
 import android.app.Activity
 import android.app.ProgressDialog
@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.example.attendance.R
 import com.example.attendance.databinding.FragmentSignUpBinding
 import com.example.attendance.viewmodels.SignUpViewModel
 
