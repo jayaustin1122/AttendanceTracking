@@ -47,6 +47,9 @@ class HomeAdminFragment : Fragment() {
         progressDialog.setTitle("PLease wait")
         progressDialog.setCanceledOnTouchOutside(false)
         getUsers()
+        binding.addnewEmployee.setOnClickListener {
+            findNavController().navigate(R.id.action_homeAdminFragment_to_signUpFragment)
+        }
     }
 
     private fun getUsers() {
@@ -67,7 +70,7 @@ class HomeAdminFragment : Fragment() {
 
                     }
                     //set up adapter
-                    adapter = HomeAdapter(this@HomeAdminFragment.requireContext(), accArrayList,findNavController())
+                    adapter = HomeAdapter(requireContext(), accArrayList,findNavController())
                     //set to recycler
                     binding.recy.setHasFixedSize(true)
                     binding.recy.layoutManager = LinearLayoutManager(context)

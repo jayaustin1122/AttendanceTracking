@@ -48,8 +48,8 @@ class HomeAdapter(
         val userType2 = model.userType
         val image = model.image
         val uid = model.uid
-        val fingerPrint = model.uid
-        val rfid = model.uid
+        val fingerPrint = model.fingerPrint
+        val rfid = model.RFID
         holder.apply {
             Glide.with(this@HomeAdapter.context)
                 .load(image)
@@ -61,8 +61,9 @@ class HomeAdapter(
         holder.itemView.setOnClickListener {
             val detailsFragment = DetailsFragment()
             val bundle = Bundle().apply {
-                putString("rfid", rfid)
-                putString("fingerPrint", fingerPrint)
+                putString("uid", uid)
+                putString("image", image)
+                putString("fullName", fullName)
             }
             detailsFragment.arguments = bundle
             navController.navigate(R.id.detailsFragment, bundle)

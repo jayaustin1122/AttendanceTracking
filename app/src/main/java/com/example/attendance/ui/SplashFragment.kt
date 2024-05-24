@@ -25,8 +25,8 @@ class SplashFragment : Fragment() {
     ): View? {
         auth = FirebaseAuth.getInstance()
         Handler().postDelayed({
-            findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
-        },2000)
+            findNavController().navigate(R.id.action_splashFragment_to_homeAdminFragment)
+        },3500)
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_splash, container, false)

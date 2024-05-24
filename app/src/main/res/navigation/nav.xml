@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav"
-    app:startDestination="@id/adminNavFragment">
+    app:startDestination="@id/attendanceFragment">
 
     <fragment
         android:id="@+id/splashFragment"
@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_splashFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_homeAdminFragment"
+            app:destination="@id/homeAdminFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -54,4 +57,18 @@
         android:name="com.example.attendance.admin.tabs.DetailsFragment"
         android:label="fragment_details"
         tools:layout="@layout/fragment_details" />
+    <fragment
+        android:id="@+id/attendanceFragment"
+        android:name="com.example.attendance.admin.AttendanceFragment"
+        android:label="fragment_attendance"
+        tools:layout="@layout/fragment_attendance" />
+    <fragment
+        android:id="@+id/homeAdminFragment"
+        android:name="com.example.attendance.admin.tabs.HomeAdminFragment"
+        android:label="fragment_home_admin"
+        tools:layout="@layout/fragment_home_admin" >
+        <action
+            android:id="@+id/action_homeAdminFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+    </fragment>
 </navigation>

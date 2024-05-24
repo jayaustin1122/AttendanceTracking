@@ -70,7 +70,7 @@ class SignUpFragment : Fragment() {
         }
 
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.loginFragment)
+            findNavController().navigate(R.id.homeAdminFragment)
             database.getReference("RegisterState").setValue("False")
         }
 
@@ -241,7 +241,7 @@ class SignUpFragment : Fragment() {
         val uid = auth.uid
 
         val reference = storage.reference.child("profile")
-            .child(uid!!)
+            .child(binding.etFullname.text.toString())
         reference.putFile(selectedImage).addOnCompleteListener{
             if (it.isSuccessful){
                 reference.downloadUrl.addOnSuccessListener {task->
