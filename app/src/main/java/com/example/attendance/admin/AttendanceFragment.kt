@@ -47,38 +47,43 @@ class AttendanceFragment : Fragment() {
         storage = FirebaseStorage.getInstance()
         database = FirebaseDatabase.getInstance()
         handler.post(fetchRFIDDataRunnable)
-        binding.button.setOnClickListener{
-            uploadDataToFirebase()
-        }
-        binding.timeout.setOnClickListener{
-            uploadDataToFirebase2()
-        }
+
     }
 
     private fun uploadDataToFirebase2() {
-        // Query the "Users" node to find matching user
-        val usersRef = database.getReference("Users")
-        usersRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(usersSnapshot: DataSnapshot) {
-                usersSnapshot.children.forEach { userChild ->
-                    val userData = userChild.getValue(UsersModel::class.java)
+        val faceData = binding.face.text.toString().trim()
+        val fingerprintData = binding.fingerprint.text.toString().trim()
+        val rfidData = binding.rfid.text.toString().trim()
 
-                    // Check if any of the fields match
-                    if (userData?.face == binding.face.text ||
-                        userData?.fingerPrint == binding.fingerprint.text ||
-                        userData?.RFID == binding.rfid.text
-                    ) {
-                        val uid = userChild.key // Get the UID of the user
-                        processUser2(uid) // Pass UID to another function for processing
+        // Check if any of the fields are empty
+        if (faceData.isNotEmpty() || fingerprintData.isNotEmpty() || rfidData.isNotEmpty()) {
+            // Query the "Users" node to find matching user
+            val usersRef = database.getReference("Users")
+            usersRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(usersSnapshot: DataSnapshot) {
+                    usersSnapshot.children.forEach { userChild ->
+                        val userData = userChild.getValue(UsersModel::class.java)
+
+                        // Check if any of the fields match
+                        if (userData?.face == binding.face.text ||
+                            userData?.fingerPrint == binding.fingerprint.text ||
+                            userData?.RFID == binding.rfid.text
+                        ) {
+                            val uid = userChild.key // Get the UID of the user
+                            processUser2(uid) // Pass UID to another function for processing
+                        }
                     }
                 }
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                // Handle onCancelled if needed
-            }
-        })
+                override fun onCancelled(error: DatabaseError) {
+                    // Handle onCancelled if needed
+                }
+            })
+
+        }
     }
+
+
     private fun processUser2(uid: String?) {
         uid?.let { userId ->
             val currentDate = getCurrentDate()
@@ -90,23 +95,58 @@ class AttendanceFragment : Fragment() {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
                         // Attendance data for the current date exists, so insert the timeout timestamp
-                        val timeStamp = System.currentTimeMillis()
-                        val attendanceData = HashMap<String, Any>()
-                        val currentTime = getCurrentTime()
-                        attendanceData["timeout"] = currentTime.toString()
+                        if (!dataSnapshot.hasChild("timeout")) {
+                            // If "timeout" path doesn't exist, add it
+                            val currentTime = getCurrentTime()
+                            val attendanceData = HashMap<String, Any>()
+                            attendanceData["timeout"] = currentTime.toString()
 
-                        attendanceRef.updateChildren(attendanceData).addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
+                            attendanceRef.updateChildren(attendanceData).addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    database.getReference("Pasok/face").setValue("")
+                                    database.getReference("Pasok/fingerprint").setValue("")
+                                    database.getReference("Pasok/rfid").setValue("")
+                                    binding.rfid.text = ""
+                                    binding.face.text = ""
+                                    binding.fingerprint.text = ""
+                                } else {
+                                    // Handle failure if needed
+                                }
+                            }
+                        } else {
+                            // If "timeout" path exists, check if it has a value
+                            val timeoutValue = dataSnapshot.child("timeout").getValue(String::class.java)
+                            if (timeoutValue.isNullOrEmpty()) {
+                                // If "timeout" has no value, update it
+                                val currentTime = getCurrentTime()
+                                val attendanceData = HashMap<String, Any>()
+                                attendanceData["timeout"] = currentTime.toString()
+
+                                attendanceRef.updateChildren(attendanceData).addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        database.getReference("Pasok/face").setValue("")
+                                        database.getReference("Pasok/fingerprint").setValue("")
+                                        database.getReference("Pasok/rfid").setValue("")
+                                        binding.rfid.text = ""
+                                        binding.face.text = ""
+                                        binding.fingerprint.text = ""
+                                    } else {
+                                        // Handle failure if needed
+                                    }
+                                }
+                            } else {
                                 database.getReference("Pasok/face").setValue("")
                                 database.getReference("Pasok/fingerprint").setValue("")
                                 database.getReference("Pasok/rfid").setValue("")
-                            } else {
-                                // Handle failure if needed
+                                binding.rfid.text = ""
+                                binding.face.text = ""
+                                binding.fingerprint.text = ""
                             }
                         }
                     } else {
                         // Attendance data for the current date does not exist, so skip the upload
                         Log.d("AttendanceFragment", "Attendance data for $currentDate does not exist. Skipping timeout update.")
+                        return
                     }
                 }
 
@@ -121,12 +161,16 @@ class AttendanceFragment : Fragment() {
 
 
 
+
     private val fetchRFIDDataRunnable = object : Runnable {
         override fun run() {
             getRFIDData()
             getFingerPrint()
             getFaceID()
+            uploadDataToFirebase()
+            uploadDataToFirebase2()
             handler.postDelayed(this, 1000) // Fetch data every minute (60000 milliseconds)
+
         }
     }
 
@@ -205,28 +249,36 @@ class AttendanceFragment : Fragment() {
         })
     }
     private fun uploadDataToFirebase() {
-        // Query the "Users" node to find matching user
-        val usersRef = database.getReference("Users")
-        usersRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(usersSnapshot: DataSnapshot) {
-                usersSnapshot.children.forEach { userChild ->
-                    val userData = userChild.getValue(UsersModel::class.java)
+        val faceData = binding.face.text.toString().trim()
+        val fingerprintData = binding.fingerprint.text.toString().trim()
+        val rfidData = binding.rfid.text.toString().trim()
 
-                    // Check if any of the fields match
-                    if (userData?.face == binding.face.text ||
-                        userData?.fingerPrint == binding.fingerprint.text ||
-                        userData?.RFID == binding.rfid.text
-                    ) {
-                        val uid = userChild.key // Get the UID of the user
-                        processUser(uid) // Pass UID to another function for processing
+        // Check if any of the fields are empty
+        if (faceData.isNotEmpty() || fingerprintData.isNotEmpty() || rfidData.isNotEmpty()) {
+            // Query the "Users" node to find matching user
+            val usersRef = database.getReference("Users")
+            usersRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(usersSnapshot: DataSnapshot) {
+                    usersSnapshot.children.forEach { userChild ->
+                        val userData = userChild.getValue(UsersModel::class.java)
+
+                        // Check if any of the fields match
+                        if (userData?.face == binding.face.text ||
+                            userData?.fingerPrint == binding.fingerprint.text ||
+                            userData?.RFID == binding.rfid.text
+                        ) {
+                            val uid = userChild.key // Get the UID of the user
+                            processUser(uid) // Pass UID to another function for processing
+                        }
                     }
                 }
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                // Handle onCancelled if needed
-            }
-        })
+                override fun onCancelled(error: DatabaseError) {
+                    // Handle onCancelled if needed
+                }
+            })
+
+        }
     }
 
     private fun processUser(uid: String?) {
@@ -246,23 +298,43 @@ class AttendanceFragment : Fragment() {
                         val currentTime = getCurrentTime()
                         val attendanceRef = userRef.child("Attendance").child(currentDate)
                         val timeStamp = System.currentTimeMillis()
-                        val attendanceData = HashMap<String, Any>()
-                        attendanceData["timestamp"] = currentTime.toString()
-                        attendanceData["date"] = currentDate.toString()
-                        attendanceData["rfid"] = binding.rfid.text.toString()
-                        attendanceData["face"] = binding.face.text.toString()
-                        attendanceData["finger"] = binding.fingerprint.text.toString()
 
-                        attendanceRef.setValue(attendanceData).addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                // If the attendance is successfully added, clear the fields in "Pasok"
-                                database.getReference("Pasok/face").setValue("")
-                                database.getReference("Pasok/fingerprint").setValue("")
-                                database.getReference("Pasok/rfid").setValue("")
-                            } else {
-                                // Handle failure if needed
+                        // Fetch user's full name from database
+                        userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(userDataSnapshot: DataSnapshot) {
+                                if (userDataSnapshot.exists()) {
+                                    val fullName = userDataSnapshot.child("fullName").getValue(String::class.java)
+
+                                    // Create attendance data
+                                    val attendanceData = HashMap<String, Any>()
+                                    attendanceData["timestamp"] = currentTime.toString()
+                                    attendanceData["date"] = currentDate
+                                    fullName?.let { attendanceData["fullName"] = it }
+                                    attendanceData["rfid"] = binding.rfid.text.toString()
+                                    attendanceData["face"] = binding.face.text.toString()
+                                    attendanceData["finger"] = binding.fingerprint.text.toString()
+
+                                    // Save attendance data
+                                    attendanceRef.setValue(attendanceData).addOnCompleteListener { task ->
+                                        if (task.isSuccessful) {
+                                            // If the attendance is successfully added, clear the fields in "Pasok"
+                                            database.getReference("Pasok/face").setValue("")
+                                            database.getReference("Pasok/fingerprint").setValue("")
+                                            database.getReference("Pasok/rfid").setValue("")
+                                            binding.rfid.text = ""
+                                            binding.face.text = ""
+                                            binding.fingerprint.text = ""
+                                        } else {
+                                            // Handle failure if needed
+                                        }
+                                    }
+                                }
                             }
-                        }
+
+                            override fun onCancelled(databaseError: DatabaseError) {
+                                // Handle onCancelled if needed
+                            }
+                        })
                     }
                 }
 

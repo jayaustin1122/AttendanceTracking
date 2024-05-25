@@ -15,13 +15,15 @@ import com.example.attendance.databinding.FragmentDetailsBinding
 import com.example.attendance.admin.tabs.model.LogsModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
 
 class DetailsFragment : Fragment() {
 
     private var _binding: FragmentDetailsBinding? = null
     private val binding get() = _binding!!
     private lateinit var logsAdapter: LogsAdapter
-    private lateinit var databaseReference: DatabaseReference
     private lateinit var auth: FirebaseAuth
     private lateinit var fragmentManager: FragmentManager
 
@@ -50,13 +52,19 @@ class DetailsFragment : Fragment() {
         Glide.with(requireContext())
             .load(image)
             .into(binding.circleImageView)
-
+        binding.currentMonth.text = getCurrentMonth()
 
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+    @SuppressLint("SimpleDateFormat")
+    private fun getCurrentMonth(): String {
+        val currentDateObject = Date()
+        val formatter = SimpleDateFormat("MMMM")
+        return formatter.format(currentDateObject)
     }
 
 

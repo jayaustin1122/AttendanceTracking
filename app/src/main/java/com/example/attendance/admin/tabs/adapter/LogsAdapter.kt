@@ -25,7 +25,6 @@ class LogsAdapter(private var logList: List<LogsModel>) : RecyclerView.Adapter<L
 
     override fun onBindViewHolder(holder: LogViewHolder, position: Int) {
         val log = logList[position]
-        holder.binding.tvDate.text = log.date
         val timeIn = log.timestamp
 
         val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
@@ -34,21 +33,22 @@ class LogsAdapter(private var logList: List<LogsModel>) : RecyclerView.Adapter<L
         // Format the date to display the day of the week
         val dayOfWeekFormat = SimpleDateFormat("EEEE", Locale.getDefault())
         val dayOfWeek = dayOfWeekFormat.format(date)
-
+        val dayFormat = SimpleDateFormat("dd", Locale.getDefault())
+        val day = dayFormat.format(date)
         // Set the day of the week in the TextView
         holder.binding.tvDay.text = dayOfWeek
-
+        holder.binding.tvDate.text = day
         // Parse the timestamp to get the hour of the day
         val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
         val time = timeFormat.parse(timeIn)
         val calendar = Calendar.getInstance()
         calendar.time = time
-        val timeOut = log.timeOut
+        val timeOut = log.timeout
         val hourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
 
         // Set the background color based on the time
         when {
-            hourOfDay in 8..15 -> holder.binding.card.setCardBackgroundColor(
+            hourOfDay in 9..15 -> holder.binding.card.setCardBackgroundColor(
                 ContextCompat.getColor(holder.itemView.context, R.color.red)
             )
             hourOfDay >= 16 -> holder.binding.card.setCardBackgroundColor(

@@ -1,13 +1,15 @@
 package com.example.attendance.admin.tabs.model
 
 data class LogsModel (
-    val timestamp: String = "",
-    val timeOut: String = "",
-    val date: String = ""
+    var timestamp: String = "",
+    var timeout: String = "",
+    var date: String = "",
+    var fullName: String = ""
+
 
 
 ){
-    constructor() : this("", "", "") {
+    constructor() : this("", "", "","") {
         // Default constructor required for Firebase
     }
 }
