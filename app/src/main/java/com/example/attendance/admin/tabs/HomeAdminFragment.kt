@@ -18,6 +18,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 class HomeAdminFragment : Fragment() {
@@ -47,6 +49,7 @@ class HomeAdminFragment : Fragment() {
         progressDialog.setTitle("PLease wait")
         progressDialog.setCanceledOnTouchOutside(false)
         getUsers()
+        displayTimeSettings()
         binding.addnewEmployee.setOnClickListener {
             findNavController().navigate(R.id.action_homeAdminFragment_to_signUpFragment)
         }
@@ -83,5 +86,38 @@ class HomeAdminFragment : Fragment() {
 
             })
         }
+
+    private fun displayTimeSettings() {
+        val databaseReference = FirebaseDatabase.getInstance().reference.child("TimeSettings")
+
+        databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // Retrieve time_in and time_out values from dataSnapshot
+                val timeIn = dataSnapshot.child("time_in").getValue(String::class.java)
+                val timeOut = dataSnapshot.child("time_out").getValue(String::class.java)
+
+                // Convert time from 24-hour format to 12-hour format
+                val timeIn12Hour = convertTo12HourFormat(timeIn)
+                val timeOut12Hour = convertTo12HourFormat(timeOut)
+
+                // Display the converted values in TextViews
+                // Assuming you have TextViews with IDs timeInTextView and timeOutTextView
+                binding.tvTimeInLimit.text = "Time In: $timeIn12Hour"
+                binding.tvTimeOutLimit.text = "Time Out: $timeOut12Hour"
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle errors here
+            }
+        })
+    }
+
+    private fun convertTo12HourFormat(time: String?): String {
+        val sdf24 = SimpleDateFormat("HH:mm", Locale.getDefault())
+        val sdf12 = SimpleDateFormat("hh:mm a", Locale.getDefault())
+        val date = sdf24.parse(time ?: "00:00")
+        return sdf12.format(date)
+    }
+
 
 }

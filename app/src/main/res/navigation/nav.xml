@@ -74,4 +74,13 @@
             android:id="@+id/action_homeAdminFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsAdminFragment"
+        android:name="com.example.attendance.admin.tabs.SettingsAdminFragment"
+        android:label="SettingsAdminFragment" />
+    <fragment
+        android:id="@+id/editFragment"
+        android:name="com.example.attendance.admin.tabs.EditFragment"
+        android:label="fragment_edit"
+        tools:layout="@layout/fragment_edit" />
 </navigation>

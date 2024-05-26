@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".admin.tabs.EditFragment">
+
+    <Button
+        android:id="@+id/btnTimeIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Time In"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvTimeInLimit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="234908127"
+        app:layout_constraintStart_toEndOf="@id/btnTimeIn"
+        app:layout_constraintTop_toTopOf="@id/btnTimeIn" />
+
+    <Button
+        android:id="@+id/btnTimeOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Time Out"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnTimeIn" />
+
+    <TextView
+        android:id="@+id/tvTimeOutLimit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="239043w904"
+        app:layout_constraintStart_toEndOf="@id/btnTimeOut"
+        app:layout_constraintTop_toTopOf="@id/btnTimeOut" />
+
+    <Button
+        android:id="@+id/btnUpdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update Database"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnTimeOut" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
