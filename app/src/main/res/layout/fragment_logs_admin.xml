@@ -6,6 +6,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".admin.tabs.LogsAdminFragment">
 
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imgBtnFilter"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/baseline_filter_list_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/pageTitle" />
+
     <TextView
         android:id="@+id/pageTitle"
         android:layout_width="wrap_content"

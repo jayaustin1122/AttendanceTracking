@@ -51,7 +51,10 @@ class HomeAdminFragment : Fragment() {
         getUsers()
         displayTimeSettings()
         binding.addnewEmployee.setOnClickListener {
-            findNavController().navigate(R.id.action_homeAdminFragment_to_signUpFragment)
+            findNavController().apply {
+                popBackStack(R.id.homeAdminFragment,false)
+                navigate(R.id.signUpFragment) // Navigate to LoginFragment
+            }
         }
     }
 
@@ -73,7 +76,7 @@ class HomeAdminFragment : Fragment() {
 
                     }
                     //set up adapter
-                    adapter = HomeAdapter(requireContext(), accArrayList,findNavController())
+                    adapter = HomeAdapter(this@HomeAdminFragment.requireContext(), accArrayList,findNavController())
                     //set to recycler
                     binding.recy.setHasFixedSize(true)
                     binding.recy.layoutManager = LinearLayoutManager(context)

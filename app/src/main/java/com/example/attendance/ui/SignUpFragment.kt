@@ -70,7 +70,7 @@ class SignUpFragment : Fragment() {
         }
 
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.homeAdminFragment)
+            findNavController().navigate(R.id.adminNavFragment)
             database.getReference("RegisterState").setValue("False")
         }
 
