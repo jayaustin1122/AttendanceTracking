@@ -19,6 +19,12 @@
         <action
             android:id="@+id/action_splashFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_homeAdminFragment"
+            app:destination="@id/homeAdminFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_adminNavFragment"
+            app:destination="@id/adminNavFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -44,4 +50,37 @@
         android:name="com.example.attendance.ui.AdminFragmentFragment"
         android:label="fragment_admin_fragment"
         tools:layout="@layout/fragment_admin_fragment" />
+    <fragment
+        android:id="@+id/adminNavFragment"
+        android:name="com.example.attendance.admin.AdminNavFragment"
+        android:label="fragment_admin_nav"
+        tools:layout="@layout/fragment_admin_nav" />
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.example.attendance.admin.tabs.DetailsFragment"
+        android:label="fragment_details"
+        tools:layout="@layout/fragment_details" />
+    <fragment
+        android:id="@+id/attendanceFragment"
+        android:name="com.example.attendance.admin.AttendanceFragment"
+        android:label="fragment_attendance"
+        tools:layout="@layout/fragment_attendance" />
+    <fragment
+        android:id="@+id/homeAdminFragment"
+        android:name="com.example.attendance.admin.tabs.HomeAdminFragment"
+        android:label="fragment_home_admin"
+        tools:layout="@layout/fragment_home_admin" >
+        <action
+            android:id="@+id/action_homeAdminFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsAdminFragment"
+        android:name="com.example.attendance.admin.tabs.SettingsAdminFragment"
+        android:label="SettingsAdminFragment" />
+    <fragment
+        android:id="@+id/editFragment"
+        android:name="com.example.attendance.admin.tabs.EditFragment"
+        android:label="fragment_edit"
+        tools:layout="@layout/fragment_edit" />
 </navigation>

@@ -25,8 +25,8 @@ class SplashFragment : Fragment() {
     ): View? {
         auth = FirebaseAuth.getInstance()
         Handler().postDelayed({
-                checkUser()
-        },2000)
+            checkUser()
+        },3500)
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_splash, container, false)
@@ -48,7 +48,7 @@ class SplashFragment : Fragment() {
 
                         if (userType == "admin") {
                             Toast.makeText(this@SplashFragment.requireContext(), "Login Successfully", Toast.LENGTH_SHORT).show()
-                            findNavController().navigate(R.id.action_splashFragment_to_adminFragmentFragment)
+                            findNavController().navigate(R.id.action_splashFragment_to_adminNavFragment)
 
                         } else if (userType == "member") {
                             findNavController().navigate(R.id.action_splashFragment_to_userFragment)
