@@ -213,14 +213,13 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSignUp"
         android:layout_width="match_parent"
-        android:layout_height="46dp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginBottom="10dp"
-        android:backgroundTint="@color/blue"
+        android:backgroundTint="#A6B1E1"
+        android:fontFamily="@font/bold"
+        android:textColor="#1D2245"
         android:text="Sign Up"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
