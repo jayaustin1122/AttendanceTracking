@@ -1,6 +1,7 @@
 package com.example.attendance.ui
 
 import android.annotation.SuppressLint
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.example.attendance.R
@@ -29,6 +31,7 @@ import java.util.Locale
 class UserFragment : Fragment() {
     private var _binding: FragmentUserBinding? = null
     private val binding get() = _binding!!
+    private lateinit var progressDialog : ProgressDialog
     private lateinit var logsAdapter: LogsAdapter
     private lateinit var databaseReference: DatabaseReference
     private lateinit var auth: FirebaseAuth
@@ -51,6 +54,9 @@ class UserFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         auth = FirebaseAuth.getInstance()
+        progressDialog = ProgressDialog(this.requireContext())
+        progressDialog.setTitle("Please wait")
+        progressDialog.setCanceledOnTouchOutside(false)
         fragmentManager = requireActivity().supportFragmentManager
         binding.recycler.layoutManager = GridLayoutManager(requireContext(), 2)
         logsAdapter = LogsAdapter(emptyList()) // Initialize adapter with empty list
@@ -63,7 +69,19 @@ class UserFragment : Fragment() {
         loadUsersInfo()
         displayTimeSettings()
         binding.currentMonth.text = getCurrentMonth()
+        binding.btnLogout.setOnClickListener {
+            progressDialog.setMessage("Logging Out...")
+            progressDialog.show()
+            view.postDelayed({
+                auth.signOut()
+                progressDialog.dismiss()
 
+                findNavController().apply {
+                    popBackStack(R.id.settingsAdminFragment, false)
+                    navigate(R.id.loginFragment)
+                }
+            }, 2000)
+        }
     }
     override fun onDestroyView() {
         super.onDestroyView()

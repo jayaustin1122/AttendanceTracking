@@ -219,7 +219,7 @@
         android:backgroundTint="#A6B1E1"
         android:fontFamily="@font/bold"
         android:textColor="#1D2245"
-        android:text="Sign Up"
+        android:text="Create Account"
         app:layout_constraintBottom_toTopOf="@id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

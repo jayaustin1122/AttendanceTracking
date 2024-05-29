@@ -48,10 +48,10 @@ class SplashFragment : Fragment() {
 
                         if (userType == "admin") {
                             Toast.makeText(this@SplashFragment.requireContext(), "Login Successfully", Toast.LENGTH_SHORT).show()
-                            findNavController().navigate(R.id.action_splashFragment_to_adminNavFragment)
+                            findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
 
                         } else if (userType == "member") {
-                            findNavController().navigate(R.id.action_splashFragment_to_userFragment)
+                            findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
                         }
                     }
 

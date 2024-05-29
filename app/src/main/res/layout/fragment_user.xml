@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.UserFragment">
 
@@ -15,7 +16,7 @@
         android:fontFamily="@font/medium"
         android:text="12:00"
         android:textColor="@color/black"
-        android:textSize="24sp"
+        android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/pageTitle"
         app:layout_constraintTop_toBottomOf="@+id/pageTitle" />
@@ -27,7 +28,7 @@
         android:fontFamily="@font/medium"
         android:text="12:00"
         android:textColor="@color/black"
-        android:textSize="24sp"
+        android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/tvTimeInLimit"
         app:layout_constraintTop_toBottomOf="@+id/tvTimeInLimit" />
@@ -49,11 +50,12 @@
         android:id="@+id/circleImageView"
         android:layout_width="150dp"
         android:layout_height="130dp"
+        android:layout_marginTop="16dp"
         android:src="@drawable/profile"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pageTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTimeInLimit" />
 
     <TextView
         android:id="@+id/name"
@@ -79,6 +81,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/pageTitad"
         app:layout_constraintTop_toBottomOf="@+id/name" />
+
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:backgroundTint="@android:color/holo_red_light"
+        android:fontFamily="@font/bold"
+        android:text="LOGOUT"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/pageTitad"

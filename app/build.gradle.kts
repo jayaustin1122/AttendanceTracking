@@ -51,7 +51,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
 
-
+    implementation ("com.itextpdf:itext7-core:7.1.15")
     implementation (platform("com.google.firebase:firebase-bom:31.2.0"))
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
@@ -71,7 +71,8 @@ dependencies {
 
     //karumi to access other component of mobile
     implementation ("com.karumi:dexter:6.2.2")
-
+    implementation ("com.itextpdf:kernel:7.1.15")
+    implementation ("com.itextpdf:layout:7.1.15")
     //glide
     implementation ("com.github.bumptech.glide:glide:4.14.2")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.14.2")

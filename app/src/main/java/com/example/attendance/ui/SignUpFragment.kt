@@ -2,12 +2,15 @@ package com.example.attendance.ui
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.ContentValues
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -31,6 +34,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -63,11 +67,18 @@ class SignUpFragment : Fragment() {
         handler.post(fetchRFIDDataRunnable)
 
         binding.imageView2.setOnClickListener {
-            val intent = Intent()
-            intent.action = Intent.ACTION_GET_CONTENT
-            intent.type = "image/*"
-            startActivityForResult(intent,1)
+            val options = arrayOf("Choose from Gallery", "Take a Picture")
+            AlertDialog.Builder(requireContext())
+                .setTitle("Select Image")
+                .setItems(options) { dialog, which ->
+                    when (which) {
+                        0 -> openGallery()
+                        1 -> openCamera()
+                    }
+                }
+                .show()
         }
+
 
         binding.btnBack.setOnClickListener {
             findNavController().navigate(R.id.adminNavFragment)
@@ -82,6 +93,23 @@ class SignUpFragment : Fragment() {
 
 
     }
+    private fun openGallery() {
+        val intent = Intent()
+        intent.action = Intent.ACTION_GET_CONTENT
+        intent.type = "image/*"
+        startActivityForResult(intent, REQUEST_GALLERY)
+    }
+
+    private fun openCamera() {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(intent, REQUEST_CAMERA)
+    }
+
+    companion object {
+        private const val REQUEST_GALLERY = 1
+        private const val REQUEST_CAMERA = 2
+    }
+
     private val handler = Handler()
 
     private val fetchRFIDDataRunnable = object : Runnable {
@@ -261,14 +289,31 @@ class SignUpFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (resultCode == Activity.RESULT_OK) {
-            if (data != null) {
-                if (data.data != null) {
-                    selectedImage = data.data!!
-                    binding.imageView2.setImageURI(selectedImage)
+            when (requestCode) {
+                REQUEST_GALLERY -> {
+                    data?.data?.let {
+                        selectedImage = it
+                        binding.imageView2.setImageURI(selectedImage)
+                    }
+                }
+                REQUEST_CAMERA -> {
+                    data?.extras?.get("data")?.let {
+                        val bitmap = it as Bitmap
+                        selectedImage = getImageUriFromBitmap(bitmap)
+                        binding.imageView2.setImageBitmap(bitmap)
+                    }
                 }
             }
         }
     }
+
+    private fun getImageUriFromBitmap(bitmap: Bitmap): Uri {
+        val bytes = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(requireContext().contentResolver, bitmap, "Title", null)
+        return Uri.parse(path)
+    }
+
     private var email = ""
     private var pass = ""
     private var fullname = ""
@@ -316,11 +361,9 @@ class SignUpFragment : Fragment() {
                         progressDialog.dismiss()
                         uploadInfo2()
                         uploadInfo3()
-                        findNavController().apply {
-                            popBackStack(R.id.signUpFragment, false) // Pop all fragments up to HomeFragment
-                            navigate(R.id.loginFragment) // Navigate to LoginFragment
-                            database.getReference("RegisterState").setValue("False")
-                        }
+
+                        findNavController().navigate(R.id.adminNavFragment)
+                        database.getReference("RegisterState").setValue("False")
                         Toast.makeText(this.requireContext(),"Account Created", Toast.LENGTH_SHORT).show()
                         database.getReference("RFID").setValue("")
                         database.getReference("Register/fingerprintUID").setValue("")

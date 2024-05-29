@@ -14,7 +14,7 @@
         android:backgroundTint="#A6B1E1"
         android:layout_marginBottom="40dp"
         android:fontFamily="@font/bold"
-        android:text="Sign Up"
+        android:text="Log In"
         android:textColor="#1D2245"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
